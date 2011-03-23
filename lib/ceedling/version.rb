@@ -1,9 +1,10 @@
 module Ceedling
   module Version
-    CEEDLING = "fill me in"
-    CEXCEPTION = "fill me in"
-    CMOCK = "fill me in"
     GEM = "0.0.1"
-    UNITY = "fill me in"
+
+    CEEDLING = "0.9.157"
+    CEXCEPTION = "1.2.0.16"
+    CMOCK = "2.0.209"
+    UNITY = "2.0.118"
   end
 end
