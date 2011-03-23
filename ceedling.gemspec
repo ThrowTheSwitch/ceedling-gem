@@ -4,13 +4,13 @@ require "ceedling/version"
 
 Gem::Specification.new do |s|
   s.name        = "ceedling"
-  s.version     = Ceedling::VERSION
+  s.version     = Ceedling::Version::GEM
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.authors     = ["Mike Karlesky, Mark Vandervoord", "Greg Williams", "Matt Fletcher"]
+  s.email       = ["karlesky@atomicobject.com, mvandervoord@gmail.com, williams@atomicobject.com, fletcher@atomicobject.com"]
+  s.homepage    = "http://throwtheswitch.org/"
+  s.summary     = %q{Gemified version of the Ceedling C testing library}
+  s.description = %q{Gemified version of the Ceedling C testing library}
 
   s.rubyforge_project = "ceedling"
 
