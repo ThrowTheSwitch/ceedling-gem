@@ -6,7 +6,7 @@ task :update_versions do
   versions = {}
   # There's an extra line at the begining, but who cares.
   full_version_info = nil
-  Dir.chdir("new_project") { full_version_info = `rake version` }
+  Dir.chdir("new_project_template") { full_version_info = `rake version` }
   full_version_info.each_line do |line|
     line = line.split("::")
     versions[line.first.strip.upcase] = line.last.strip
