@@ -1,14 +1,17 @@
 #!/usr/bin/env ruby
 require "rubygems"
 require "thor"
-require "fileutils"
 
 class CeedlingTasks < Thor
   include Thor::Actions
-  include FileUtils
+
+  def self.source_root
+    File.dirname(__FILE__) + "/.."
+  end
 
   desc "new PROJECT_NAME", "create a new ceedling project"
   def new(name)
+    directory "new_project", name
   end
 end
 CeedlingTasks.start
