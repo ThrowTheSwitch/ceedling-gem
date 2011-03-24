@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+require "rubygems"
+require "thor"
+require "fileutils"
+
+class CeedlingTasks < Thor
+  include Thor::Actions
+  include FileUtils
+
+  desc "new PROJECT_NAME", "create a new ceedling project"
+  def new(name)
+    puts "got #{name}"
+  end
+end
+CeedlingTasks.start
