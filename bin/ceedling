@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require "rubygems"
 require "thor"
+require "ceedling"
 
 class CeedlingTasks < Thor
   include Thor::Actions
@@ -19,9 +20,20 @@ class CeedlingTasks < Thor
   copies the newest ceedling code into the vendor/ceedling directory under the given project root.
 
   NOTE: this task assumes the vendor/ceedling directory has already been deleted
+
+  Example: [ceedling update .] will deposit the latest ceedling files to ./vendor/ceedling 
   d
   def update(project_dir)
     directory "new_project_template/vendor", "#{project_dir}/vendor"
+  end
+
+  desc "version", "print all ceedling gem and library versions"
+  def version
+    puts "       Gem:: #{Ceedling::Version::GEM}"
+    puts "  Ceedling:: #{Ceedling::Version::CEEDLING}"
+    puts "CException:: #{Ceedling::Version::CEXCEPTION}"
+    puts "     CMock:: #{Ceedling::Version::CMOCK}"
+    puts "     Unity:: #{Ceedling::Version::UNITY}"
   end
 end
 CeedlingTasks.start

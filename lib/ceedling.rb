@@ -1,3 +1,4 @@
+require "ceedling/version"
+
 module Ceedling
-  # Your code goes here...
 end
