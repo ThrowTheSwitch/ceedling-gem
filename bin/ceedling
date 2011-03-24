@@ -12,7 +12,7 @@ class CeedlingTasks < Thor
 
   desc "new PROJECT_NAME", "create a new ceedling project"
   def new(name)
-    directory "new_project_template", name
+    directory Ceedling::NEW_PROJECT_DIR, name
   end
 
   desc "update DIRECTORY", "update the vendor/ceedling directory under the given project root"
