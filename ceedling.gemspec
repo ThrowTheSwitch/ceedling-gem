@@ -7,10 +7,10 @@ Gem::Specification.new do |s|
   s.version     = Ceedling::Version::GEM
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Mike Karlesky, Mark VanderVoord", "Greg Williams", "Matt Fletcher"]
-  s.email       = ["karlesky@atomicobject.com, mvandervoord@gmail.com, williams@atomicobject.com, fletcher@atomicobject.com"]
+  s.email       = ["michael@karlesky.net, mvandervoord@gmail.com, williams@atomicobject.com, fletcher@atomicobject.com"]
   s.homepage    = "http://throwtheswitch.org/"
-  s.summary     = %q{Gemified version of the Ceedling C testing library}
-  s.description = %q{Gemified version of the Ceedling C testing library}
+  s.summary     = %q{Gemified version of the Ceedling C testing / build environment}
+  s.description = %q{Gemified version of the Ceedling C testing / build environment}
 
   s.rubyforge_project = "ceedling"
 
