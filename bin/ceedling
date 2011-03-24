@@ -9,7 +9,6 @@ class CeedlingTasks < Thor
 
   desc "new PROJECT_NAME", "create a new ceedling project"
   def new(name)
-    puts "got #{name}"
   end
 end
 CeedlingTasks.start
