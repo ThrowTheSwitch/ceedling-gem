@@ -13,5 +13,15 @@ class CeedlingTasks < Thor
   def new(name)
     directory "new_project_template", name
   end
+
+  desc "update DIRECTORY", "update the vendor/ceedling directory under the given project root"
+  long_desc <<-d
+  copies the newest ceedling code into the vendor/ceedling directory under the given project root.
+
+  NOTE: this task assumes the vendor/ceedling directory has already been deleted
+  d
+  def update(project_dir)
+    directory "new_project_template/vendor", "#{project_dir}/vendor"
+  end
 end
 CeedlingTasks.start
