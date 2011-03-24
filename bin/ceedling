@@ -11,7 +11,7 @@ class CeedlingTasks < Thor
 
   desc "new PROJECT_NAME", "create a new ceedling project"
   def new(name)
-    directory "new_project", name
+    directory "new_project_template", name
   end
 end
 CeedlingTasks.start
