@@ -4,7 +4,7 @@ Bundler::GemHelper.install_tasks
 desc "update ceedling versions in gem; assumes ceedling up-to-date"
 task :update_versions do
   versions = {}
-  # There's an extra line at the begining, but who cares.
+  # There's an extra line of junk at the beginning, but who cares.
   full_version_info = nil
   Dir.chdir("new_project_template") { full_version_info = `rake version` }
   full_version_info.each_line do |line|
