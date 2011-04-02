@@ -2,6 +2,7 @@
 require "rubygems"
 require "thor"
 require "ceedling"
+require "fileutils"
 
 class CeedlingTasks < Thor
   include Thor::Actions
@@ -25,6 +26,15 @@ class CeedlingTasks < Thor
   d
   def update(project_dir)
     directory "new_project_template/vendor", "#{project_dir}/vendor"
+  end
+
+  desc "example PROJ_NAME [DEST]", "create specified example project (in DEST, if specified)"
+  def example(proj_name, dest)
+    if proj_name.nil?
+      FileUtils.Dir("examples").each {|proj| puts "  #{proj}"}
+    end
+    dest = "." if dest.nil?
+    directory "./temp_sensor_project/", proj_name
   end
 
   desc "version", "print all ceedling gem and library versions"

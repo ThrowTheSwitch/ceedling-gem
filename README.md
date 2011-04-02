@@ -27,6 +27,23 @@ Updates an existing project with the newest ceedling code in the gem. To update,
    will copy ceedling to ./vendor/ceedling.
 1. Add the new directory to your version control system.
 
+List example project
+--------------------
+
+    ceedling example
+
+List the available example projects.
+
+Create example project
+----------------------
+
+    ceedling example PROJECT_NAME [DEST]
+
+Creates the specified example project in the current directory (or in destination directoy, if specified).
+
+Valid PROJECT_NAMEs
+* temp_sensor
+
 Print ceedling versions
 -----------------------
 
