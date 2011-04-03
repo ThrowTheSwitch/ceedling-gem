@@ -10,11 +10,11 @@
   :test:
     - test/*
   :source:
-    - source/*
+    - src/*
   :include:
-    - source/*
-  :test_toolchain_include:
-    - tools/mingw/include
+    - src/*
+#  :test_toolchain_include:
+#    - tools/mingw/include
 
 :defines:
   :common: &common_defines
@@ -26,7 +26,7 @@
 
 :module_generator:
   :project_root: ./
-  :source_root: source/
+  :source_root: src/
   :test_root: test/
   :header_includes:
     - Types.h
@@ -51,18 +51,11 @@
     U16*: HEX32
     C8*:  STRING
 
-:environment:
-  - :bullseye: "#{PROJECT_ROOT}/tools/bullseye/bin/"
-  - :bullseye_cov_browser: "C:/Program Files/BullseyeCoverage/bin/"
-  - :path: "#{ENV['BULLSEYE']};#{ENV['BULLSEYE_COV_BROWSER']};#{ENV['PATH']}"
-
 :plugins:
   :base_path: tools/ceedling/plugins
   :auxiliary_load_path: tools/ceedling/plugins/support
   :enabled:
     - stdout_ide_tests_report
     - module_generator
-    - bullseye
-    - svn_externals_report
 
 ...

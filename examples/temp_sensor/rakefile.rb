@@ -1,4 +1,4 @@
 PROJECT_ROOT  = File.expand_path(File.dirname(__FILE__))
-PROJECT_TOOLS = 'tools'
+PROJECT_TOOLS = 'vendor'
 
-load 'tools/ceedling/lib/rakefile.rb'
+load 'vendor/ceedling/lib/rakefile.rb'

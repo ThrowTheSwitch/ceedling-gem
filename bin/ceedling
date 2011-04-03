@@ -28,13 +28,18 @@ class CeedlingTasks < Thor
     directory "new_project_template/vendor", "#{project_dir}/vendor"
   end
 
-  desc "example PROJ_NAME [DEST]", "create specified example project (in DEST, if specified)"
-  def example(proj_name, dest)
+  desc "example [PROJ_NAME] [DEST]", "create specified example project (in DEST, if specified)"
+  def example(proj_name=nil, dest=".")
     if proj_name.nil?
-      FileUtils.Dir("examples").each {|proj| puts "  #{proj}"}
+      puts "Available sample projects:"
+      FileUtils.cd(File.dirname(__FILE__) + "/../examples") do
+        Dir["*"].each {|proj| puts "  #{proj}"}
+      end
+      return
     end
     dest = "." if dest.nil?
-    directory "./temp_sensor_project/", proj_name
+    directory Ceedling::NEW_PROJECT_DIR, dest
+    directory "examples/#{proj_name}", dest
   end
 
   desc "version", "print all ceedling gem and library versions"
