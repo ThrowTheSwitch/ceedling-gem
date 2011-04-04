@@ -14,7 +14,7 @@
   :test_file_prefix: Test
 
 #:release_build:
-#  :output: TempSensor.out
+#  :output: MyApp.out
 #  :use_assembly: FALSE
 
 :environment:

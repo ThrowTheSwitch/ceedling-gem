@@ -39,6 +39,8 @@ class CeedlingTasks < Thor
     end
     dest = "." if dest.nil?
     directory Ceedling::NEW_PROJECT_DIR, dest
+    remove_file "#{dest}/project.yml"
+    remove_file "#{dest}/rakefile.rb"
     directory "examples/#{proj_name}", dest
   end
 
