@@ -7,7 +7,7 @@ require 'deep_merge'
 
 class Configurator
 
-  attr_reader :project_config_hash, :environment, :script_plugins, :rake_plugins
+  attr_reader :project_config_hash, :script_plugins, :rake_plugins
   attr_accessor :project_logging, :project_debug, :project_verbosity, :sanity_checks
   
   constructor(:configurator_setup, :configurator_builder, :configurator_plugins, :cmock_builder, :yaml_wrapper, :system_wrapper) do
@@ -17,14 +17,10 @@ class Configurator
     @sanity_checks     = TestResultsSanityChecks::NORMAL
   end
   
-  
   def setup
     # special copy of cmock config to provide to cmock for construction
     @cmock_config_hash = {}
 
-    # capture our source config for later merge operations
-    @source_config_hash = {}
-    
     # note: project_config_hash is an instance variable so constants and accessors created
     # in eval() statements in build() have something of proper scope and persistence to reference
     @project_config_hash = {}
@@ -33,7 +29,7 @@ class Configurator
     @script_plugins = []
     @rake_plugins   = []
   end
-
+  
   
   def replace_flattened_config(config)
     @project_config_hash.merge!(config)
@@ -69,13 +65,13 @@ class Configurator
 
 
   def populate_defaults(config)
-    new_config = DEFAULT_CEEDLING_CONFIG.clone
+    new_config = DEFAULT_CEEDLING_CONFIG.deep_clone
     new_config.deep_merge!(config)
     config.replace(new_config)
 
     @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_TEST )
     @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_TEST_PREPROCESSORS ) if (config[:project][:use_test_preprocessor])
-    @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_TEST_DEPENDENCIES ) if (config[:project][:use_auxiliary_dependencies])
+    @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_TEST_DEPENDENCIES )  if (config[:project][:use_auxiliary_dependencies])
     
     @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_RELEASE )              if (config[:project][:release_build])
     @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_RELEASE_ASSEMBLER )    if (config[:project][:release_build] and config[:release_build][:use_assembly])
@@ -131,18 +127,39 @@ class Configurator
 
 
   # grab tool names from yaml and insert into tool structures so available for error messages
-  def populate_tool_names_and_stderr_redirect(config)
+  # set up default values
+  def tools_setup(config)
     config[:tools].each_key do |name|
       tool = config[:tools][name]
-      
+
       # populate name if not given      
       tool[:name] = name.to_s if (tool[:name].nil?)
 
       # populate stderr redirect option
       tool[:stderr_redirect] = StdErrRedirect::NONE if (tool[:stderr_redirect].nil?)
+
+      # populate background execution option
+      tool[:background_exec] = BackgroundExec::NONE if (tool[:background_exec].nil?)
+
+      # populate optional option to control verification of executable in search paths
+      tool[:optional] = false if (tool[:optional].nil?)
     end
   end
   
+  def tools_supplement_arguments(config)
+    config[:tools].each_key do |name|
+      tool = @project_config_hash[('tools_' + name.to_s).to_sym]
+
+      # smoosh in extra arguments if specified at top-level of config (useful for plugins & default gcc tools)
+      # arguments are squirted in at beginning of list
+      top_level_tool = ('tool_' + name.to_s).to_sym
+      if (not config[top_level_tool].nil?)
+         # adding and flattening is not a good idea: might over-flatten if there's array nesting in tool args
+         # use _with_index to preserve order
+         config[top_level_tool][:arguments].each_with_index { |arg, index| tool[:arguments].insert( index, arg ) }
+      end
+    end
+  end
 
   def find_and_merge_plugins(config)
     # plugins must be loaded before generic path evaluation & magic that happen later: perform path magic here as discrete step
@@ -151,7 +168,7 @@ class Configurator
       FilePathUtils::standardize(path)
     end
     
-    @configurator_plugins.add_load_paths(config)
+    paths_hash = @configurator_plugins.add_load_paths(config)
   
     @rake_plugins   = @configurator_plugins.find_rake_plugins(config)
     @script_plugins = @configurator_plugins.find_script_plugins(config)
@@ -168,6 +185,8 @@ class Configurator
     
     # special plugin setting for results printing
     config[:plugins][:display_raw_test_results] = true if (config[:plugins][:display_raw_test_results].nil?)
+    
+    paths_hash.each_pair { |name, path| config[:plugins][name] = path }
   end
 
   
@@ -179,7 +198,7 @@ class Configurator
         value_string.replace(@system_wrapper.module_eval(value_string))
       end
       @system_wrapper.env_set(key.to_s.upcase, value_string)
-    end    
+    end
   end
 
   
@@ -234,14 +253,44 @@ class Configurator
   end
     
   
-  def build(config)
-    built_config = @configurator_setup.build_project_config(config)
+  # create constants and accessors (attached to this object) from given hash
+  def build(config, *keys)
+    # create flattened & expanded configuration hash
+    built_config = @configurator_setup.build_project_config( config, @configurator_builder.flattenify( config ) )
     
-    @source_config_hash   = config.clone
-    @project_config_hash  = built_config.clone
+    @project_config_hash = built_config.clone
     store_config()
 
     @configurator_setup.build_constants_and_accessors(built_config, binding())
+    
+    # top-level keys disappear when we flatten, so create global constants & accessors to any specified keys
+    keys.each do |key|
+      hash = { key => config[key] }
+      @configurator_setup.build_constants_and_accessors(hash, binding())      
+    end
+  end
+
+
+  # add to constants and accessors as post build step
+  def build_supplement(config_base, config_more)
+    # merge in our post-build additions to base configuration hash
+    config_base.deep_merge!( config_more )
+
+    # flatten our addition hash
+    config_more_flattened = @configurator_builder.flattenify( config_more )
+    
+    # merge our flattened hash with built hash from previous build
+    @project_config_hash.deep_merge!( config_more_flattened )
+    store_config()
+
+    # create more constants and accessors
+    @configurator_setup.build_constants_and_accessors(config_more_flattened, binding())
+    
+    # recreate constants & update accessors with new merged, base values
+    config_more.keys.each do |key|
+      hash = { key => config_base[key] }
+      @configurator_setup.build_constants_and_accessors(hash, binding())
+    end
   end
     
   

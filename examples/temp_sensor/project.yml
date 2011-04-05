@@ -62,8 +62,8 @@
     - UnityHelper.h
 
 :plugins:
-  :base_path: vendor/ceedling/plugins
-  :auxiliary_load_path: vendor/ceedling/plugins/support
+  :load_paths:
+    - vendor/ceedling/plugins
   :enabled:
     - stdout_pretty_tests_report
     - module_generator

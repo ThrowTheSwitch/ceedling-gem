@@ -59,7 +59,7 @@
 
 :plugins:
   :load_paths:
-    - "#{File.join(PROJECT_CEEDLING_ROOT, 'plugins')}"
+    - vendor/ceedling/plugins
   :enabled:
     - stdout_pretty_tests_report
 ...

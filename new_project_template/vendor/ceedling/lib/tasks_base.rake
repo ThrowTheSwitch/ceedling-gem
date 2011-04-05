@@ -64,10 +64,10 @@ end
 
 
 # list expanded environment variables
-if (not COLLECTION_ENVIRONMENT.empty?)
+if (not ENVIRONMENT.empty?)
 desc "List all configured environment variables."
 task :environment do
-  COLLECTION_ENVIRONMENT.each do |env|
+  ENVIRONMENT.each do |env|
     env.each_key do |key|
       name = key.to_s.upcase
       puts " - #{name}: \"#{env[key]}\""

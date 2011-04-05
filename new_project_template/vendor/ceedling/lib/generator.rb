@@ -18,14 +18,14 @@ class Generator
   def generate_dependencies_file(tool, context, source, object, dependencies)
     @streaminator.stdout_puts("Generating dependencies for #{File.basename(source)}...", Verbosity::NORMAL)
     
-    command_line = 
+    command = 
       @tool_executor.build_command_line(
         tool,
         source,
         dependencies,
         object)
     
-    @tool_executor.exec(command_line)
+    @tool_executor.exec( command[:line], command[:options] )
   end
 
   def generate_mock(context, header_filepath)
@@ -67,7 +67,8 @@ class Generator
     @plugin_manager.pre_compile_execute(arg_hash)
 
     @streaminator.stdout_puts("Compiling #{File.basename(arg_hash[:source])}...", Verbosity::NORMAL)
-    shell_result = @tool_executor.exec( @tool_executor.build_command_line(arg_hash[:tool], arg_hash[:source], arg_hash[:object]) )
+    command      = @tool_executor.build_command_line(arg_hash[:tool], arg_hash[:source], arg_hash[:object])
+    shell_result = @tool_executor.exec( command[:line], command[:options] )
 
     arg_hash[:shell_result] = shell_result
     @plugin_manager.post_compile_execute(arg_hash)
@@ -81,7 +82,8 @@ class Generator
     @streaminator.stdout_puts("Linking #{File.basename(arg_hash[:executable])}...", Verbosity::NORMAL)
     
     begin
-      shell_result = @tool_executor.exec( @tool_executor.build_command_line(arg_hash[:tool], arg_hash[:objects], arg_hash[:executable]) )
+      command = @tool_executor.build_command_line(arg_hash[:tool], arg_hash[:objects], arg_hash[:executable])
+      shell_result = @tool_executor.exec( command[:line], command[:options] )
     rescue
       notice =    "\n" +
                   "NOTICE: If the linker reports missing symbols, the following may be to blame:\n" +
@@ -110,10 +112,16 @@ class Generator
     
     # Unity's exit code is equivalent to the number of failed tests, so we tell @tool_executor not to fail out if there are failures
     # so that we can run all tests and collect all results
-    shell_result = @tool_executor.exec( @tool_executor.build_command_line(arg_hash[:tool], arg_hash[:executable]), [], {:boom => false} )
+    command = @tool_executor.build_command_line(arg_hash[:tool], arg_hash[:executable])
+    command[:options][:boom] = false
+    shell_result = @tool_executor.exec( command[:line], command[:options] )
     
     if (shell_result[:output].nil? or shell_result[:output].strip.empty?)
-      @streaminator.stderr_puts("ERROR: Test executable \"#{File.basename(executable)}\" did not produce any results.", Verbosity::ERRORS)
+      notice = "\n" +
+               "ERROR: Test executable \"#{File.basename(executable)}\" did not produce any results.\n" +
+               "This is most often a symptom of bad memory accesses in source or test code.\n\n"
+      
+      @streaminator.stderr_puts(notice, Verbosity::COMPLAIN)
       raise
     end
     

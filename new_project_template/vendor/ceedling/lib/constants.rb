@@ -24,6 +24,15 @@ class StdErrRedirect
   TCSH = :tcsh
 end
 
+
+class BackgroundExec
+  NONE = :none
+  AUTO = :auto
+  WIN  = :win
+  UNIX = :unix
+end
+
+
 CEXCEPTION_ROOT_PATH = 'c_exception'
 CEXCEPTION_LIB_PATH  = "#{CEXCEPTION_ROOT_PATH}/lib"
 CEXCEPTION_C_FILE    = 'CException.c'
@@ -49,11 +58,15 @@ INPUT_CONFIGURATION_CACHE_FILE     = 'input.yml'   # input configuration file du
 
 TEST_ROOT_NAME    = 'test'
 TEST_TASK_ROOT    = TEST_ROOT_NAME + ':'
-TEST_CONTEXT      = TEST_ROOT_NAME.to_sym
+TEST_SYM          = TEST_ROOT_NAME.to_sym
 
 RELEASE_ROOT_NAME = 'release'
 RELEASE_TASK_ROOT = RELEASE_ROOT_NAME + ':'
-RELEASE_CONTEXT   = RELEASE_ROOT_NAME.to_sym
+RELEASE_SYM       = RELEASE_ROOT_NAME.to_sym
+
+UTILS_ROOT_NAME   = 'utils'
+UTILS_TASK_ROOT   = UTILS_ROOT_NAME + ':'
+UTILS_SYM         = UTILS_ROOT_NAME.to_sym
 
 
 RUBY_STRING_REPLACEMENT_PATTERN = /#\{.+\}/
@@ -62,5 +75,5 @@ TOOL_EXECUTOR_ARGUMENT_REPLACEMENT_PATTERN = /(\$\{(\d+)\})/
 
 NULL_FILE_PATH = '/dev/null'
 
-TESTS_BASE_PATH   = 'tests'
-RELEASE_BASE_PATH = 'release'
+TESTS_BASE_PATH   = TEST_ROOT_NAME
+RELEASE_BASE_PATH = RELEASE_ROOT_NAME

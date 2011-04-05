@@ -64,7 +64,7 @@ class ConfiguratorBuilder
   def populate_defaults(config, defaults)
     defaults.keys.sort.each do |section|
       defaults[section].keys.sort.each do |entry|
-        config[section][entry] = defaults[section][entry] if (config[section].nil? or config[section][entry].nil?)
+        config[section][entry] = defaults[section][entry].deep_clone if (config[section].nil? or config[section][entry].nil?)
       end
     end
   end
@@ -192,13 +192,6 @@ class ConfiguratorBuilder
   end
   
 
-  def collect_environment_variables(in_hash)
-    return {
-      :collection_environment => in_hash[:environment]
-      }
-  end
-
-  
   def collect_project_options(in_hash)
     options = []
     
