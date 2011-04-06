@@ -5,9 +5,9 @@ module Ceedling
     GEM = "0.0.4"
 
     # @private
-    CEEDLING = "0.9.157"
+    CEEDLING = "0.9.172"
     # @private
-    CEXCEPTION = "1.2.0.16"
+    CEXCEPTION = "1.2.16"
     # @private
     CMOCK = "2.0.209"
     # @private
