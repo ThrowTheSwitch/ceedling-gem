@@ -42,6 +42,7 @@ Create example project
 Creates the specified example project in the current directory (or in destination directoy, if specified).
 
 Valid PROJECT_NAMEs
+
 * temp_sensor
 
 Print ceedling versions

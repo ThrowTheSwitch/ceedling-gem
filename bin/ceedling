@@ -14,6 +14,7 @@ class CeedlingTasks < Thor
   desc "new PROJECT_NAME", "create a new ceedling project"
   def new(name)
     directory Ceedling::NEW_PROJECT_DIR, name
+    puts "Execute 'rake test:delta' to run your tests"
   end
 
   desc "update DIRECTORY", "update the vendor/ceedling directory under the given project root"
@@ -28,20 +29,24 @@ class CeedlingTasks < Thor
     directory "new_project_template/vendor", "#{project_dir}/vendor"
   end
 
-  desc "example [PROJ_NAME] [DEST]", "create specified example project (in DEST, if specified)"
-  def example(proj_name=nil, dest=".")
-    if proj_name.nil?
-      puts "Available sample projects:"
-      FileUtils.cd(File.dirname(__FILE__) + "/../examples") do
-        Dir["*"].each {|proj| puts "  #{proj}"}
-      end
-      return
+  desc "examples", "list available example projects"
+  def examples()
+    puts "Available sample projects:"
+    FileUtils.cd(File.dirname(__FILE__) + "/../examples") do
+      Dir["*"].each {|proj| puts "  #{proj}"}
     end
+  end
+
+  desc "example [PROJ_NAME] [DEST]", "create specified example project (in DEST, if specified)"
+  def example(proj_name, dest=".")
     dest = "." if dest.nil?
     directory Ceedling::NEW_PROJECT_DIR, dest
     remove_file "#{dest}/project.yml"
     remove_file "#{dest}/rakefile.rb"
     directory "examples/#{proj_name}", dest
+    puts "\n"
+    puts "Example project creation successful"
+    puts "Execute 'rake test:delta' to run your tests"
   end
 
   desc "version", "print all ceedling gem and library versions"

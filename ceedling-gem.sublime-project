@@ -8,42 +8,18 @@
 	"buffers":
 	[
 		{
-			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/bin/ceedling",
-			"settings":
-			{
-				"buffer_size": 1745,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/examples/temp_sensor/project.yml",
 			"settings":
 			{
-				"buffer_size": 1127,
+				"buffer_size": 1078,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/examples/temp_sensor/rakefile.rb",
-			"settings":
-			{
-				"buffer_size": 121,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/Rakefile",
-			"settings":
-			{
-				"buffer_size": 652,
-				"line_ending": "Unix"
 			}
 		},
 		{
 			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/README.md",
 			"settings":
 			{
-				"buffer_size": 1917,
+				"buffer_size": 1918,
 				"line_ending": "Unix"
 			}
 		},
@@ -59,7 +35,15 @@
 			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/lib/ceedling/version.rb",
 			"settings":
 			{
-				"buffer_size": 245,
+				"buffer_size": 243,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/bin/ceedling",
+			"settings":
+			{
+				"buffer_size": 1745,
 				"line_ending": "Unix"
 			}
 		},
@@ -67,14 +51,60 @@
 			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/new_project_template/project.yml",
 			"settings":
 			{
-				"buffer_size": 1300,
+				"buffer_size": 1275,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/lib/ceedling/version.rb.erb",
+			"settings":
+			{
+				"buffer_size": 320,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/lib/ceedling.rb",
+			"settings":
+			{
+				"buffer_size": 102,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/new_project_template/rakefile.rb",
+			"settings":
+			{
+				"buffer_size": 131,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/new_project_template/vendor/ceedling/lib/rakefile.rb",
+			"settings":
+			{
+				"buffer_size": 2353,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/Users/greg/git/ceedling-gem/ceedling-gem/new_project_template/vendor/ceedling/lib/tasks_base.rake",
+			"settings":
+			{
+				"buffer_size": 2996,
+				"line_ending": "Windows"
 			}
 		}
 	],
 	"build_system": "",
 	"file_history":
 	[
+		"/Users/greg/git/ceedling-gem/ceedling-gem/Rakefile",
+		"/Users/greg/git/ceedling-gem/ceedling-gem/version.info",
+		"/Users/greg/git/ceedling-gem/ceedling-gem/new_project_template/vendor/ceedling/plugins/bullseye/template.erb",
+		"/Users/greg/git/ceedling-gem/ceedling-gem/temp/vendor/cmock/release/version.info",
+		"/Users/greg/git/ceedling-gem/ceedling-gem/temp/vendor/c_exception/release/version.info",
+		"/Users/greg/git/ceedling-gem/ceedling-gem/examples/temp_sensor/rakefile.rb",
 		"/Users/greg/git/ceedling-gem/ceedling-gem/delete.rb",
 		"/Users/greg/git/ceedling-gem/ceedling-gem/temp_sensor_project/rakefile.rb",
 		"/Users/greg/Downloads/BullseyeCoverage-8.0.19/README",
@@ -88,9 +118,11 @@
 	{
 		"include_history":
 		[
+			""
 		],
 		"location_history":
 		[
+			"<open folders>"
 		]
 	},
 	"find_state":
@@ -98,6 +130,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"test_sensor",
+			"task :version",
+			"dest",
 			"Dir"
 		],
 		"highlight": true,
@@ -128,46 +163,18 @@
 			[
 				{
 					"buffer": 0,
-					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/bin/ceedling",
-					"settings":
-					{
-						"buffer_size": 1745,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								285,
-								285
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0,
-						"translation.y": 0,
-						"zoom_level": 1
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
 					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/examples/temp_sensor/project.yml",
 					"settings":
 					{
-						"buffer_size": 1127,
+						"buffer_size": 1078,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								177,
-								177
+								371,
+								371
 							]
 						],
 						"settings":
@@ -177,79 +184,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0,
-						"translation.y": 0,
+						"translation.y": 211,
 						"zoom_level": 1
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/examples/temp_sensor/rakefile.rb",
-					"settings":
-					{
-						"buffer_size": 121,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								80,
-								80
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage"
-						},
-						"translation.x": 0,
-						"translation.y": 0,
-						"zoom_level": 1
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/Rakefile",
-					"settings":
-					{
-						"buffer_size": 652,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								652,
-								652
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Ruby/Ruby.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0,
-						"translation.y": 0,
-						"zoom_level": 1
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
+					"buffer": 1,
 					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/README.md",
 					"settings":
 					{
-						"buffer_size": 1917,
+						"buffer_size": 1918,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1211,
-								1211
+								1247,
+								1247
 							]
 						],
 						"settings":
@@ -257,13 +210,13 @@
 							"syntax": "Packages/Markdown/Markdown.tmLanguage"
 						},
 						"translation.x": 0,
-						"translation.y": 238,
+						"translation.y": 239,
 						"zoom_level": 1
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 2,
 					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/ceedling.gemspec",
 					"settings":
 					{
@@ -274,8 +227,8 @@
 						"selection":
 						[
 							[
-								678,
-								678
+								593,
+								593
 							]
 						],
 						"settings":
@@ -291,19 +244,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 3,
 					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/lib/ceedling/version.rb",
 					"settings":
 					{
-						"buffer_size": 245,
+						"buffer_size": 243,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								75,
-								75
+								0,
+								0
 							]
 						],
 						"settings":
@@ -317,27 +270,49 @@
 						"zoom_level": 1
 					},
 					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 0,
-			"sheets":
-			[
+				},
 				{
-					"buffer": 7,
-					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/new_project_template/project.yml",
+					"buffer": 4,
+					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/bin/ceedling",
 					"settings":
 					{
-						"buffer_size": 1300,
+						"buffer_size": 1745,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								585,
-								585
+								1370,
+								1370
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0,
+						"translation.y": 0,
+						"zoom_level": 1
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/new_project_template/project.yml",
+					"settings":
+					{
+						"buffer_size": 1275,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								860,
+								860
 							]
 						],
 						"settings":
@@ -348,6 +323,148 @@
 						},
 						"translation.x": 0,
 						"translation.y": 127,
+						"zoom_level": 1
+					},
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 6,
+					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/lib/ceedling/version.rb.erb",
+					"settings":
+					{
+						"buffer_size": 320,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								75,
+								75
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Rails/HTML (Rails).tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0,
+						"translation.y": 0,
+						"zoom_level": 1
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/lib/ceedling.rb",
+					"settings":
+					{
+						"buffer_size": 102,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0,
+						"translation.y": 0,
+						"zoom_level": 1
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/new_project_template/rakefile.rb",
+					"settings":
+					{
+						"buffer_size": 131,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								131,
+								131
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage"
+						},
+						"translation.x": 0,
+						"translation.y": 0,
+						"zoom_level": 1
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/new_project_template/vendor/ceedling/lib/rakefile.rb",
+					"settings":
+					{
+						"buffer_size": 2353,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								632,
+								632
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0,
+						"translation.y": 0,
+						"zoom_level": 1
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/Users/greg/git/ceedling-gem/ceedling-gem/new_project_template/vendor/ceedling/lib/tasks_base.rake",
+					"settings":
+					{
+						"buffer_size": 2996,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								802,
+								802
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Ruby/Ruby.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0,
+						"translation.y": 0,
 						"zoom_level": 1
 					},
 					"type": "text"
@@ -392,6 +509,26 @@
 		"selected_items":
 		[
 			[
+				"ceedling",
+				"lib/ceedling.rb"
+			],
+			[
+				"versioerb",
+				"lib/ceedling/version.rb.erb"
+			],
+			[
+				"/plugins",
+				"new_project_template/vendor/ceedling/plugins/bullseye/template.erb"
+			],
+			[
+				"versionin",
+				"temp/vendor/cmock/release/version.info"
+			],
+			[
+				"versinfo",
+				"temp/vendor/c_exception/release/version.info"
+			],
+			[
 				"proje",
 				"new_project_template/project.yml"
 			],
@@ -418,10 +555,6 @@
 			[
 				"foo",
 				"foo.rb"
-			],
-			[
-				"ceedling",
-				"bin/ceedling"
 			]
 		],
 		"width": 0
