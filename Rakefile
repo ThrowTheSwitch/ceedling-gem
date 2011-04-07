@@ -35,7 +35,7 @@ task :update_tools do
     {:src => 'vendor/unity/src/',                                :dest => 'vendor/unity/'},
     {:src => 'vendor/c_exception/docs/CExceptionSummary.pdf',    :dest => 'docs/', :is_file => true},
     {:src => 'vendor/cmock/docs/CMock Summary.pdf',              :dest => 'docs/', :is_file => true},
-    {:src => 'docs/Ceedling Packet.pdf',                         :dest => 'docs/', :is_file => true},
+    {:src => 'docs/CeedlingPacket.pdf',                          :dest => 'docs/', :is_file => true},
     {:src => 'vendor/unity/docs/Unity Summary.pdf',              :dest => 'docs/', :is_file => true},
   ]
 

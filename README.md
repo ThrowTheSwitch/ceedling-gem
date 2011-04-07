@@ -30,7 +30,7 @@ Updates an existing project with the newest ceedling code in the gem. To update,
 List example project
 --------------------
 
-    ceedling example
+    ceedling examples
 
 List the available example projects.
 
