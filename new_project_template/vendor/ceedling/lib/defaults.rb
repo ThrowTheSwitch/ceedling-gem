@@ -16,6 +16,7 @@ DEFAULT_TEST_COMPILER_TOOL = {
     "-DGNU_COMPILER".freeze,
     "-c \"${1}\"".freeze,
     "-o \"${2}\"".freeze,
+    # gcc's list file output options are complex; no use of ${3} parameter in default config    
     ].freeze
   }
 
@@ -72,7 +73,7 @@ DEFAULT_TEST_FILE_PREPROCESSOR_TOOL = {
   :arguments => [
     '-E'.freeze,
     {"-I\"$\"" => 'COLLECTION_PATHS_TEST_SUPPORT_SOURCE_INCLUDE_VENDOR'}.freeze,
-    {"-I\"$\"" => 'PATHS_TEST_TOOLCHAIN_INCLUDE'}.freeze,
+    {"-I\"$\"" => 'COLLECTION_PATHS_TEST_TOOLCHAIN_INCLUDE'}.freeze,
     {"-D$" => 'COLLECTION_DEFINES_TEST_AND_VENDOR'}.freeze,
     {"-D$" => 'DEFINES_TEST_PREPROCESS'}.freeze,
     "-DGNU_PREPROCESSOR".freeze,
@@ -109,7 +110,7 @@ DEFAULT_RELEASE_DEPENDENCIES_GENERATOR_TOOL = {
   :background_exec => BackgroundExec::NONE.freeze,
   :optional => false.freeze,
   :arguments => [
-    {"-I\"$\"" => 'COLLECTION_PATHS_SOURCE_AND_INCLUDE'}.freeze,
+    {"-I\"$\"" => 'COLLECTION_PATHS_SOURCE_INCLUDE_VENDOR'}.freeze,
     {"-I\"$\"" => 'COLLECTION_PATHS_RELEASE_TOOLCHAIN_INCLUDE'}.freeze,
     {"-D$" => 'COLLECTION_DEFINES_RELEASE_AND_VENDOR'}.freeze,
     {"-D$" => 'DEFINES_RELEASE_PREPROCESS'}.freeze,
@@ -137,6 +138,7 @@ DEFAULT_RELEASE_COMPILER_TOOL = {
     "-DGNU_COMPILER".freeze,
     "-c \"${1}\"".freeze,
     "-o \"${2}\"".freeze,
+    # gcc's list file output options are complex; no use of ${3} parameter in default config    
     ].freeze
   }
 
@@ -256,6 +258,7 @@ DEFAULT_CEEDLING_CONFIG = {
       :object => '.o',
       :executable => ( SystemWrapper.windows? ? EXTENSION_WIN_EXE : EXTENSION_NONWIN_EXE ),
       :map => '.map',
+      :list => '.lst',
       :testpass => '.pass',
       :testfail => '.fail',
       :dependencies => '.d',

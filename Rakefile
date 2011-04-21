@@ -31,6 +31,7 @@ task :update_tools do
     {:src => 'vendor/constructor/lib/',                          :dest => 'vendor/constructor/'},
     {:src => 'vendor/deep_merge/lib/',                           :dest => 'vendor/deep_merge/'},
     {:src => 'vendor/diy/lib',                                   :dest => 'vendor/diy/'},
+    {:src => 'vendor/unity/auto/',                               :dest => 'vendor/unity/'},
     {:src => 'vendor/unity/release/',                            :dest => 'vendor/unity/'},
     {:src => 'vendor/unity/src/',                                :dest => 'vendor/unity/'},
     {:src => 'vendor/c_exception/docs/CExceptionSummary.pdf',    :dest => 'docs/', :is_file => true},

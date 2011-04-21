@@ -1,9 +1,9 @@
-require 'constants' # for Verbosity constants class
+require 'constants'
 
 
 class Generator
 
-  constructor :configurator, :preprocessinator, :cmock_builder, :generator_test_runner, :generator_test_results, :test_includes_extractor, :tool_executor, :file_finder, :file_path_utils, :streaminator, :plugin_manager, :file_wrapper
+  constructor :configurator, :generator_helper, :preprocessinator, :cmock_builder, :generator_test_runner, :generator_test_results, :test_includes_extractor, :tool_executor, :file_finder, :file_path_utils, :streaminator, :plugin_manager, :file_wrapper
 
 
   def generate_shallow_includes_list(context, file)
@@ -40,7 +40,6 @@ class Generator
   # test_filepath may be either preprocessed test file or original test file
   def generate_test_runner(context, test_filepath, runner_filepath)
     arg_hash = {:context => context, :test_file => test_filepath, :runner_file => runner_filepath}
-
     @plugin_manager.pre_runner_execute(arg_hash)
     
     # collect info we need
@@ -51,23 +50,17 @@ class Generator
     @streaminator.stdout_puts("Generating runner for #{module_name}...", Verbosity::NORMAL)
     
     # build runner file
-    @file_wrapper.open(runner_filepath, 'w') do |output|
-      @generator_test_runner.create_header(output, mock_list)
-      @generator_test_runner.create_externs(output, test_cases)
-      @generator_test_runner.create_mock_management(output, mock_list)
-      @generator_test_runner.create_runtest(output, mock_list, test_cases)
-      @generator_test_runner.create_main(output, module_name, test_cases)
-    end
+    @generator_test_runner.generate(module_name, runner_filepath, test_cases, mock_list)
 
     @plugin_manager.post_runner_execute(arg_hash)
   end
 
-  def generate_object_file(tool, context, source, object)    
-    arg_hash = {:tool => tool, :context => context, :source => source, :object => object}
+  def generate_object_file(tool, context, source, object, list='')    
+    arg_hash = {:tool => tool, :context => context, :source => source, :object => object, :list => list}
     @plugin_manager.pre_compile_execute(arg_hash)
 
     @streaminator.stdout_puts("Compiling #{File.basename(arg_hash[:source])}...", Verbosity::NORMAL)
-    command      = @tool_executor.build_command_line(arg_hash[:tool], arg_hash[:source], arg_hash[:object])
+    command      = @tool_executor.build_command_line(arg_hash[:tool], arg_hash[:source], arg_hash[:object], arg_hash[:list])
     shell_result = @tool_executor.exec( command[:line], command[:options] )
 
     arg_hash[:shell_result] = shell_result
@@ -116,14 +109,7 @@ class Generator
     command[:options][:boom] = false
     shell_result = @tool_executor.exec( command[:line], command[:options] )
     
-    if (shell_result[:output].nil? or shell_result[:output].strip.empty?)
-      notice = "\n" +
-               "ERROR: Test executable \"#{File.basename(executable)}\" did not produce any results.\n" +
-               "This is most often a symptom of bad memory accesses in source or test code.\n\n"
-      
-      @streaminator.stderr_puts(notice, Verbosity::COMPLAIN)
-      raise
-    end
+    @generator_helper.test_results_error_handler(executable, shell_result)
     
     processed = @generator_test_results.process_and_write_results( shell_result,
                                                                    arg_hash[:result_file],

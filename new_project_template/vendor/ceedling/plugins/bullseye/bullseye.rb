@@ -35,7 +35,12 @@ class Bullseye < Plugin
     @ceedling[:plugin_manager].pre_compile_execute(arg_hash)
 
     @ceedling[:streaminator].stdout_puts("Compiling #{File.basename(source)} with coverage...")
-    compile_command  = @ceedling[:tool_executor].build_command_line(TOOLS_BULLSEYE_COMPILER, source, object)
+    compile_command  = 
+      @ceedling[:tool_executor].build_command_line(
+        TOOLS_BULLSEYE_COMPILER,
+        source,
+        object,
+        @ceedling[:file_path_utils].form_test_build_list_filepath( object ) )
     coverage_command = @ceedling[:tool_executor].build_command_line(TOOLS_BULLSEYE_INSTRUMENTATION, compile_command[:line] )
 
     shell_result     = @ceedling[:tool_executor].exec( coverage_command[:line], coverage_command[:options] )
@@ -124,7 +129,7 @@ class Bullseye < Plugin
     sources.each do |source|
       command          = @ceedling[:tool_executor].build_command_line(TOOLS_BULLSEYE_REPORT_COVFN, source)
       shell_results    = @ceedling[:tool_executor].exec(command[:line], command[:options])
-      coverage_results = shell_results[:output]
+      coverage_results = shell_results[:output].deep_clone
       coverage_results.sub!(/.*\n.*\n/,'') # Remove the Bullseye tool banner
       if (coverage_results =~ /warning cov814: report is empty/)
         coverage_results = "WARNING: #{source} contains no coverage data!\n\n"

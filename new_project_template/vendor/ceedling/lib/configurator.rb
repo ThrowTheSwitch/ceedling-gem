@@ -78,22 +78,6 @@ class Configurator
     @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_RELEASE_DEPENDENCIES ) if (config[:project][:release_build] and config[:project][:use_auxiliary_dependencies])
   end
   
-
-  def populate_unity_defines(config)
-    run_test = true
-  
-    config[:unity][:defines].each do |define|
-      if (define =~ /RUN_TEST\s*\(.+\)\s*=/)
-        run_test = false
-        break
-      end
-    end
-  
-    if (run_test)
-      config[:unity][:defines] << "\"RUN_TEST(func, line_num)=TestRun(func, #func, line_num)\""
-    end
-  end
-  
   
   def populate_cmock_defaults(config)
     # cmock has its own internal defaults handling, but we need to set these specific values
@@ -122,9 +106,13 @@ class Configurator
       cmock[:includes].uniq!
     end
 
+    @runner_config = cmock
     @cmock_builder.manufacture(cmock)
   end
-
+  
+  def get_runner_config
+    @runner_config
+  end
 
   # grab tool names from yaml and insert into tool structures so available for error messages
   # set up default values
@@ -192,12 +180,17 @@ class Configurator
   
   def eval_environment_variables(config)
     config[:environment].each do |hash|
-      key = hash.keys[0]
-      value_string = hash[key].to_s
-      if (value_string =~ RUBY_STRING_REPLACEMENT_PATTERN)
-        value_string.replace(@system_wrapper.module_eval(value_string))
-      end
-      @system_wrapper.env_set(key.to_s.upcase, value_string)
+      key   = hash.keys[0]
+      value = hash[key]
+      items = []
+            
+      interstitial = ((key == :path) ? File::PATH_SEPARATOR : '')
+      items = ((value.class == Array) ? hash[key] : [value])
+      
+      items.map { |item| item.replace( @system_wrapper.module_eval( item ) ) if (item =~ RUBY_STRING_REPLACEMENT_PATTERN) }
+      hash[key] = items.join( interstitial )
+      
+      @system_wrapper.env_set( key.to_s.upcase, hash[key] )
     end
   end
 

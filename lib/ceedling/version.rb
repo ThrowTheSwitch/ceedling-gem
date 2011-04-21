@@ -5,7 +5,7 @@ module Ceedling
     GEM = "0.0.5"
 
     # @private
-    CEEDLING = "0.9.175"
+    CEEDLING = "0.9.185"
     # @private
     CEXCEPTION = "1.2.16"
     # @private
