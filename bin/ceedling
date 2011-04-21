@@ -37,7 +37,7 @@ class CeedlingTasks < Thor
     end
   end
 
-  desc "example [PROJ_NAME] [DEST]", "create specified example project (in DEST, if specified)"
+  desc "example PROJ_NAME [DEST]", "create specified example project (in DEST, if specified)"
   def example(proj_name, dest=".")
     dest = "." if dest.nil?
     directory Ceedling::NEW_PROJECT_DIR, dest
