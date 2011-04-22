@@ -4,3 +4,11 @@ Gemfile.lock
 pkg/*
 doc
 .yardoc
+
+new_project_template/vendor/ceedling/docs/CeedlingPacket.pdf
+new_project_template/vendor/ceedling/vendor/unity/auto/colour_prompt.rb
+new_project_template/vendor/ceedling/vendor/unity/auto/colour_reporter.rb
+new_project_template/vendor/ceedling/vendor/unity/auto/generate_config.yml
+new_project_template/vendor/ceedling/vendor/unity/auto/generate_module.rb
+new_project_template/vendor/ceedling/vendor/unity/auto/test_file_filter.rb
+new_project_template/vendor/ceedling/vendor/unity/auto/unity_test_summary.rb
