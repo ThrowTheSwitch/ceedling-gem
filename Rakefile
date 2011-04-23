@@ -10,10 +10,22 @@ task :update_tools do
   puts "\nRetrieving ceedling content from SourceForge..."
   rm_rf "temp"
   mkdir "temp"
+
+  libs = [
+    {:path => './vendor/unity'},
+    {:path => './vendor/cmock'},
+    {:path => './vendor/c_exception'},
+    {:path => '.'}
+  ]
   cd "temp" do
-    svn_checkout_command = 'svn co http://ceedling.svn.sourceforge.net/svnroot/ceedling/trunk .'
-    puts svn_checkout_command
-    `#{svn_checkout_command}`
+    sh 'svn co http://ceedling.svn.sourceforge.net/svnroot/ceedling/trunk .'
+    libs.each do |lib|
+      svn_info = `svn info #{lib[:path]}/`
+      lib[:revision] = svn_info.split("\n")[4].match(/ (\d+)/)[1]
+      revision_file = "#{lib[:path]}/release/build.info"
+      puts "Recorded lib revision #{lib[:revision]} in #{revision_file}"
+      File.open(revision_file, 'w'){|f| f.write lib[:revision]}
+    end
     rm_rf Dir["./**/.svn/"], :verbose => false # remove svn artifacts
   end
 
