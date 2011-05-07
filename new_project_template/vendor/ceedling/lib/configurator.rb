@@ -83,7 +83,7 @@ class Configurator
     # cmock has its own internal defaults handling, but we need to set these specific values
     # so they're present for the build environment to access;
     # note: these need to end up in the hash given to initialize cmock for this to be successful
-    cmock = config[:cmock]
+    cmock = config[:cmock] || {}
 
     # yes, we're duplicating the default mock_prefix in cmock, but it's because we need CMOCK_MOCK_PREFIX always available in Ceedling's environment
     cmock[:mock_prefix] = 'Mock' if (cmock[:mock_prefix].nil?)
@@ -106,7 +106,7 @@ class Configurator
       cmock[:includes].uniq!
     end
 
-    @runner_config = cmock
+    @runner_config = cmock.merge(config[:test_runner] || {})
     @cmock_builder.manufacture(cmock)
   end
   
@@ -234,15 +234,16 @@ class Configurator
 
   def validate(config)
     # collect felonies and go straight to jail
-    raise if (not @configurator_setup.validate_required_sections(config))
+    raise if (not @configurator_setup.validate_required_sections( config ))
     
     # collect all misdemeanors, everybody on probation
     blotter = []
-    blotter << @configurator_setup.validate_required_section_values(config)
-    blotter << @configurator_setup.validate_paths(config)
-    blotter << @configurator_setup.validate_tools(config)
+    blotter << @configurator_setup.validate_required_section_values( config )
+    blotter << @configurator_setup.validate_paths( config )
+    blotter << @configurator_setup.validate_tools( config )
+    blotter << @configurator_setup.validate_plugins( config )
     
-    raise if (blotter.include?(false))
+    raise if (blotter.include?( false ))
   end
     
   

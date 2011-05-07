@@ -31,7 +31,7 @@ class UnityTestRunnerGenerator
 
   def run(input_file, output_file, options=nil)
     tests = []
-    includes = []
+    testfile_includes = []
     used_mocks = []
     
     @options.merge!(options) unless options.nil?
@@ -39,22 +39,22 @@ class UnityTestRunnerGenerator
     
     #pull required data from source file
     File.open(input_file, 'r') do |input|
-      tests      = find_tests(input)
-      includes   = find_includes(input)
-      used_mocks = find_mocks(includes)
+      tests               = find_tests(input)
+      testfile_includes   = find_includes(input)
+      used_mocks          = find_mocks(testfile_includes)
     end
 
     #build runner file
-    generate(input_file, output_file, tests, includes, used_mocks)
+    generate(input_file, output_file, tests, used_mocks)
     
     #determine which files were used to return them
     all_files_used = [input_file, output_file]
-    all_files_used += includes.map {|filename| filename + '.c'} unless includes.empty?
+    all_files_used += testfile_includes.map {|filename| filename + '.c'} unless testfile_includes.empty?
     all_files_used += @options[:includes] unless @options[:includes].empty?
     return all_files_used.uniq
   end
   
-  def generate(input_file, output_file, tests, includes, used_mocks)
+  def generate(input_file, output_file, tests, used_mocks)
     File.open(output_file, 'w') do |output|
       create_header(output, used_mocks)
       create_externs(output, tests, used_mocks)
@@ -155,7 +155,7 @@ class UnityTestRunnerGenerator
     output.puts("extern void setUp(void);")
     output.puts("extern void tearDown(void);")
     tests.each do |test|
-      output.puts("extern void #{test[:test]}(#{test[:call]});")
+      output.puts("extern void #{test[:test]}(#{test[:call] || 'void'});")
     end
     output.puts('')
   end
