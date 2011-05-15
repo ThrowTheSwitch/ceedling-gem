@@ -20,3 +20,11 @@ task RELEASE_SYM => [:directories] do
   Rake::Task[PROJECT_RELEASE_BUILD_TARGET].invoke
 end
 
+
+if PROJECT_USE_AUXILIARY_DEPENDENCIES
+namespace REFRESH_SYM do
+  task RELEASE_SYM do
+    @ceedling[:release_invoker].refresh_c_auxiliary_dependencies
+  end
+end
+end

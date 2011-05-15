@@ -1,9 +1,11 @@
+require 'constants'
+
 
 class TestInvoker
 
   attr_reader :sources, :tests, :mocks
 
-  constructor :configurator, :test_invoker_helper, :build_invoker_helper, :streaminator, :preprocessinator, :task_invoker, :dependinator, :project_config_manager, :file_path_utils
+  constructor :configurator, :test_invoker_helper, :build_invoker_helper, :streaminator, :preprocessinator, :task_invoker, :dependinator, :project_config_manager, :file_path_utils, :file_wrapper
 
   def setup
     @sources = []
@@ -11,7 +13,7 @@ class TestInvoker
     @mocks   = []
   end
   
-  def setup_and_invoke(tests, options={:force_run => true})
+  def setup_and_invoke(tests, context=TEST_SYM, options={:force_run => true})
   
     @tests = tests
 
@@ -37,7 +39,9 @@ class TestInvoker
         @test_invoker_helper.clean_results( {:pass => results_pass, :fail => results_fail}, options )
 
         # load up auxiliary dependencies so deep changes cause rebuilding appropriately
-        @test_invoker_helper.process_auxiliary_dependencies( core )
+        @test_invoker_helper.process_auxiliary_dependencies( core ) do |dependencies_list| 
+          @dependinator.load_test_object_deep_dependencies( dependencies_list )
+        end
 
         # tell rake to create test runner if needed
         @task_invoker.invoke_test_runner( runner )
@@ -49,9 +53,9 @@ class TestInvoker
         @dependinator.setup_test_executable_dependencies( test, objects )
 
         # 3, 2, 1... launch
-        @task_invoker.invoke_test_results( results_pass )
+        @task_invoker.invoke_test_results( results_pass )        
       rescue => e
-        @build_invoker_helper.process_exception(e)
+        @build_invoker_helper.process_exception( e, context )
       end
       
       # store away what's been processed
@@ -64,6 +68,16 @@ class TestInvoker
     
     # post-process collected sources list
     @sources.uniq!
+  end
+
+
+  def refresh_auxiliary_dependencies
+    @file_wrapper.rm_f( 
+      @file_wrapper.directory_listing( 
+        File.join( @configurator.project_test_dependencies_path, '*' + @configurator.extension_dependencies ) ) )
+
+    @test_invoker_helper.process_auxiliary_dependencies( 
+      @configurator.collection_all_tests + @configurator.collection_all_source )
   end
 
 end
