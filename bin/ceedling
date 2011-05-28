@@ -12,9 +12,15 @@ class CeedlingTasks < Thor
   end
 
   desc "new PROJECT_NAME", "create a new ceedling project"
+  method_option :nodocs, :type => :boolean, :default => false, :desc => "No docs in vendor directory"
   def new(name)
     directory Ceedling::NEW_PROJECT_DIR, name
-    puts "Execute 'rake test:delta' to run your tests"
+    remove_dir "#{name}/vendor/ceedling/docs" if options[:nodocs]
+    puts "\n"
+    puts "Project '#{name}' created!"
+    puts " - Tool documentation is located in vendor/ceedling/docs" if not options[:nodocs]
+    puts " - Execute 'rake -T' to view available test & build tasks"
+    puts ''
   end
 
   desc "update DIRECTORY", "update the vendor/ceedling directory under the given project root"
@@ -45,8 +51,10 @@ class CeedlingTasks < Thor
     remove_file "#{dest}/rakefile.rb"
     directory "examples/#{proj_name}", dest
     puts "\n"
-    puts "Example project creation successful"
-    puts "Execute 'rake test:delta' to run your tests"
+    puts "Example project '#{proj_name}' created!"
+    puts " - Tool documentation is located in vendor/ceedling/docs"
+    puts " - Execute 'rake -T' to view available test & build tasks"
+    puts ''
   end
 
   desc "version", "print all ceedling gem and library versions"
