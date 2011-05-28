@@ -31,8 +31,10 @@ class CeedlingTasks < Thor
 
   Example: [ceedling update .] will deposit the latest ceedling files to ./vendor/ceedling 
   d
+  method_option :nodocs, :type => :boolean, :default => false, :desc => "No docs in vendor directory"
   def update(project_dir)
     directory "new_project_template/vendor", "#{project_dir}/vendor"
+    remove_dir "#{project_dir}/vendor/ceedling/docs" if options[:nodocs]
   end
 
   desc "examples", "list available example projects"
