@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "ceedling"
 
-  s.add_dependency "thor", "0.14.5"
+  s.add_dependency "thor", ">= 0.14.5"
   s.add_dependency "rake", ">= 0.8.7"
 
   s.files         = `git ls-files`.split("\n")
