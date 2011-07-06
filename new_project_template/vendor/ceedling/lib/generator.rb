@@ -3,7 +3,18 @@ require 'constants'
 
 class Generator
 
-  constructor :configurator, :generator_helper, :preprocessinator, :cmock_builder, :generator_test_runner, :generator_test_results, :test_includes_extractor, :tool_executor, :file_finder, :file_path_utils, :streaminator, :plugin_manager, :file_wrapper
+  constructor :configurator, 
+              :generator_helper,
+              :preprocessinator,
+              :cmock_builder,
+              :generator_test_runner,
+              :generator_test_results,
+              :flaginator,
+              :test_includes_extractor,
+              :tool_executor,
+              :file_finder,
+              :streaminator,
+              :plugin_manager
 
 
   def generate_shallow_includes_list(context, file)
@@ -30,21 +41,21 @@ class Generator
 
   def generate_mock(context, header_filepath)
     arg_hash = {:header_file => header_filepath, :context => context}
-    @plugin_manager.pre_mock_execute(arg_hash)
+    @plugin_manager.pre_mock_generate( arg_hash )
     
     begin
       @cmock_builder.cmock.setup_mocks( arg_hash[:header_file] )
     rescue
       raise
     ensure
-      @plugin_manager.post_mock_execute(arg_hash)
+      @plugin_manager.post_mock_generate( arg_hash )
     end
   end
 
   # test_filepath may be either preprocessed test file or original test file
   def generate_test_runner(context, test_filepath, runner_filepath)
     arg_hash = {:context => context, :test_file => test_filepath, :runner_file => runner_filepath}
-    @plugin_manager.pre_runner_execute(arg_hash)
+    @plugin_manager.pre_runner_generate(arg_hash)
     
     # collect info we need
     module_name = File.basename(arg_hash[:test_file])
@@ -59,7 +70,7 @@ class Generator
     rescue
       raise
     ensure
-      @plugin_manager.post_runner_execute(arg_hash)    
+      @plugin_manager.post_runner_generate(arg_hash)    
     end
   end
 
@@ -69,7 +80,12 @@ class Generator
     @plugin_manager.pre_compile_execute(arg_hash)
 
     @streaminator.stdout_puts("Compiling #{File.basename(arg_hash[:source])}...", Verbosity::NORMAL)
-    command = @tool_executor.build_command_line(arg_hash[:tool], arg_hash[:source], arg_hash[:object], arg_hash[:list])
+    command = 
+      @tool_executor.build_command_line( arg_hash[:tool],
+                                         arg_hash[:source],
+                                         arg_hash[:object],
+                                         arg_hash[:list],
+                                         @flaginator.flag_down( OPERATION_COMPILE_SYM, context, source ) )
 
     begin
       shell_result = @tool_executor.exec( command[:line], command[:options] )
@@ -88,7 +104,12 @@ class Generator
     @plugin_manager.pre_link_execute(arg_hash)
     
     @streaminator.stdout_puts("Linking #{File.basename(arg_hash[:executable])}...", Verbosity::NORMAL)
-    command = @tool_executor.build_command_line(arg_hash[:tool], arg_hash[:objects], arg_hash[:executable], arg_hash[:map])
+    command = 
+      @tool_executor.build_command_line( arg_hash[:tool],
+                                         arg_hash[:objects],
+                                         arg_hash[:executable],
+                                         arg_hash[:map],
+                                         @flaginator.flag_down( OPERATION_LINK_SYM, context, executable ) )
     
     begin
       shell_result = @tool_executor.exec( command[:line], command[:options] )
@@ -115,7 +136,7 @@ class Generator
 
   def generate_test_results(tool, context, executable, result)
     arg_hash = {:tool => tool, :context => context, :executable => executable, :result_file => result}
-    @plugin_manager.pre_test_execute(arg_hash)
+    @plugin_manager.pre_test_fixture_execute(arg_hash)
     
     @streaminator.stdout_puts("Running #{File.basename(arg_hash[:executable])}...", Verbosity::NORMAL)
     
@@ -135,7 +156,7 @@ class Generator
     arg_hash[:results]      = processed[:results]
     arg_hash[:shell_result] = shell_result # for raw output display if no plugins for formatted display
     
-    @plugin_manager.post_test_execute(arg_hash)
+    @plugin_manager.post_test_fixture_execute(arg_hash)
   end
   
 end

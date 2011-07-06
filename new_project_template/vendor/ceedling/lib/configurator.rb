@@ -71,11 +71,11 @@ class Configurator
 
     @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_TEST )
     @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_TEST_PREPROCESSORS ) if (config[:project][:use_test_preprocessor])
-    @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_TEST_DEPENDENCIES )  if (config[:project][:use_auxiliary_dependencies])
+    @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_TEST_DEPENDENCIES )  if (config[:project][:use_deep_dependencies])
     
     @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_RELEASE )              if (config[:project][:release_build])
     @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_RELEASE_ASSEMBLER )    if (config[:project][:release_build] and config[:release_build][:use_assembly])
-    @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_RELEASE_DEPENDENCIES ) if (config[:project][:release_build] and config[:project][:use_auxiliary_dependencies])
+    @configurator_builder.populate_defaults( config, DEFAULT_TOOLS_RELEASE_DEPENDENCIES ) if (config[:project][:release_build] and config[:project][:use_deep_dependencies])
   end
   
   
@@ -110,9 +110,11 @@ class Configurator
     @cmock_builder.manufacture(cmock)
   end
   
+  
   def get_runner_config
     @runner_config
   end
+
 
   # grab tool names from yaml and insert into tool structures so available for error messages
   # set up default values
@@ -134,6 +136,7 @@ class Configurator
     end
   end
   
+  
   def tools_supplement_arguments(config)
     tools_name_prefix = 'tools_'
     config[:tools].each_key do |name|
@@ -150,8 +153,10 @@ class Configurator
     end
   end
 
+
   def find_and_merge_plugins(config)
-    # plugins must be loaded before generic path evaluation & magic that happen later: perform path magic here as discrete step
+    # plugins must be loaded before generic path evaluation & magic that happen later;
+    # perform path magic here as discrete step
     config[:plugins][:load_paths].each do |path|
       path.replace(@system_wrapper.module_eval(path)) if (path =~ RUBY_STRING_REPLACEMENT_PATTERN)
       FilePathUtils::standardize(path)
@@ -188,7 +193,7 @@ class Configurator
       interstitial = ((key == :path) ? File::PATH_SEPARATOR : '')
       items = ((value.class == Array) ? hash[key] : [value])
       
-      items.map { |item| item.replace( @system_wrapper.module_eval( item ) ) if (item =~ RUBY_STRING_REPLACEMENT_PATTERN) }
+      items.each { |item| item.replace( @system_wrapper.module_eval( item ) ) if (item =~ RUBY_STRING_REPLACEMENT_PATTERN) }
       hash[key] = items.join( interstitial )
       
       @system_wrapper.env_set( key.to_s.upcase, hash[key] )
@@ -197,38 +202,47 @@ class Configurator
 
   
   def eval_paths(config)
-    # [:plugins]:load_paths] already handled
-    individual_paths = [
+    # [:plugins]:[load_paths] already handled
+    
+    paths = [ # individual paths that don't follow convention processed below
       config[:project][:build_root],
-      config[:project][:options_paths]]
-      
-    individual_paths.flatten.each do |path|
-      path.replace(@system_wrapper.module_eval(path)) if (path =~ RUBY_STRING_REPLACEMENT_PATTERN)
-    end
-  
-    config[:paths].each_pair do |key, list|
-      list.each { |path_entry| path_entry.replace(@system_wrapper.module_eval(path_entry)) if (path_entry =~ RUBY_STRING_REPLACEMENT_PATTERN) }
-    end    
+      config[:release_build][:artifacts]]
+
+    eval_path_list( paths )
+
+    config[:paths].each_pair { |collection, paths| eval_path_list( paths ) }
+
+    config[:files].each_pair { |collection, files| eval_path_list( paths ) }
+    
+    # all other paths at secondary hash key level processed by convention:
+    # ex. [:toplevel][:foo_path] & [:toplevel][:bar_paths] are evaluated
+    config.each_pair { |parent, child| eval_path_list( collect_path_list( child ) ) }    
   end
   
   
   def standardize_paths(config)
-    # [:plugins]:load_paths] already handled
-    individual_paths = [
+    # [:plugins]:[load_paths] already handled
+    
+    paths = [ # individual paths that don't follow convention processed below
       config[:project][:build_root],
-      config[:project][:options_paths],
-      config[:cmock][:mock_path]] # cmock path in case it was explicitly set in config
+      config[:release_build][:artifacts]]
 
-    individual_paths.flatten.each { |path| FilePathUtils::standardize(path) }
+    paths.flatten.each { |path| FilePathUtils::standardize( path ) }
 
-    config[:paths].each_pair do |key, list|
-      list.each{|path| FilePathUtils::standardize(path)}
+    config[:paths].each_pair do |collection, paths|
+      paths.each{|path| FilePathUtils::standardize( path )}
       # ensure that list is an array (i.e. handle case of list being a single string)
-      config[:paths][key] = [list].flatten
+      config[:paths][collection] = [paths].flatten
     end
 
-    config[:tools].each_pair do |key, tool_config|
-      FilePathUtils::standardize(tool_config[:executable])
+    config[:files].each_pair { |collection, files| files.each{ |path| FilePathUtils::standardize( path ) } }
+
+    config[:tools].each_pair { |tool, config| FilePathUtils::standardize( config[:executable] ) }
+    
+    # all other paths at secondary hash key level processed by convention:
+    # ex. [:toplevel][:foo_path] & [:toplevel][:bar_paths] are standardized
+    config.each_pair do |parent, child|
+      collect_path_list( child ).each { |path| FilePathUtils::standardize( path ) }
     end    
   end
 
@@ -294,5 +308,22 @@ class Configurator
       @project_config_hash[:project_rakefile_component_files] << plugin
     end
   end
+  
+  ### private ###
+  
+  private
+
+  def collect_path_list( container )
+    paths = []
+    container.each_key { |key| paths << container[key] if (key.to_s =~ /_path(s)?$/) } if (container.class == Hash)
+    return paths.flatten
+  end
+  
+  def eval_path_list( paths )
+    paths.flatten.each do |path|
+      path.replace( @system_wrapper.module_eval( path ) ) if (path =~ RUBY_STRING_REPLACEMENT_PATTERN)
+    end
+  end
+  
   
 end

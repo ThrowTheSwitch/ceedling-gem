@@ -5,7 +5,17 @@ class TestInvoker
 
   attr_reader :sources, :tests, :mocks
 
-  constructor :configurator, :test_invoker_helper, :build_invoker_helper, :streaminator, :preprocessinator, :task_invoker, :dependinator, :project_config_manager, :file_path_utils, :file_wrapper
+  constructor :configurator,
+              :test_invoker_helper,
+              :plugin_manager,
+              :streaminator,
+              :preprocessinator,
+              :task_invoker,
+              :dependinator,
+              :project_config_manager,
+              :build_invoker_utils,
+              :file_path_utils,
+              :file_wrapper
 
   def setup
     @sources = []
@@ -24,7 +34,9 @@ class TestInvoker
       header = "Test '#{File.basename(test)}'"
       @streaminator.stdout_puts("\n\n#{header}\n#{'-' * header.length}")
 
-      begin      
+      begin
+        @plugin_manager.pre_test
+        
         # collect up test fixture pieces & parts
         runner       = @file_path_utils.form_runner_filepath_from_test( test )
         mock_list    = @preprocessinator.preprocess_test_and_invoke_test_mocks( test )
@@ -39,7 +51,7 @@ class TestInvoker
         @test_invoker_helper.clean_results( {:pass => results_pass, :fail => results_fail}, options )
 
         # load up auxiliary dependencies so deep changes cause rebuilding appropriately
-        @test_invoker_helper.process_auxiliary_dependencies( core ) do |dependencies_list| 
+        @test_invoker_helper.process_deep_dependencies( core ) do |dependencies_list| 
           @dependinator.load_test_object_deep_dependencies( dependencies_list )
         end
 
@@ -55,7 +67,9 @@ class TestInvoker
         # 3, 2, 1... launch
         @task_invoker.invoke_test_results( results_pass )        
       rescue => e
-        @build_invoker_helper.process_exception( e, context )
+        @build_invoker_utils.process_exception( e, context )
+      ensure
+        @plugin_manager.post_test        
       end
       
       # store away what's been processed
@@ -71,12 +85,12 @@ class TestInvoker
   end
 
 
-  def refresh_auxiliary_dependencies
+  def refresh_deep_dependencies
     @file_wrapper.rm_f( 
       @file_wrapper.directory_listing( 
         File.join( @configurator.project_test_dependencies_path, '*' + @configurator.extension_dependencies ) ) )
 
-    @test_invoker_helper.process_auxiliary_dependencies( 
+    @test_invoker_helper.process_deep_dependencies( 
       @configurator.collection_all_tests + @configurator.collection_all_source )
   end
 

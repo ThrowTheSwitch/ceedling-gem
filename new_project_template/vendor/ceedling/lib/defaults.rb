@@ -218,7 +218,7 @@ DEFAULT_CEEDLING_CONFIG = {
       :use_exceptions => true,
       :use_mocks => true,
       :use_test_preprocessor => false,
-      :use_auxiliary_dependencies => false,
+      :use_deep_dependencies => false,
       :test_file_prefix => 'test_',
       :options_paths => [],
       :release_build => false,
@@ -226,7 +226,8 @@ DEFAULT_CEEDLING_CONFIG = {
 
     :release_build => {
       # :output is set while building configuration -- allows smart default system-dependent file extension handling
-      :use_assembly => false,      
+      :use_assembly => false,
+      :artifacts => [],
     },
 
     :paths => {
@@ -236,6 +237,14 @@ DEFAULT_CEEDLING_CONFIG = {
       :include => [],
       :test_toolchain_include => [],
       :release_toolchain_include => [],
+    },
+    
+    :files => {
+      :test => [],
+      :source => [],
+      :assembly => [],
+      :support => [],
+      :include => [],
     },
     
     # unlike other top-level entries, environment's value is an array to preserve order
@@ -250,6 +259,8 @@ DEFAULT_CEEDLING_CONFIG = {
       :release => [],
       :release_preprocess => [],
     },
+    
+    :flags => {},
     
     :extension => {
       :header => '.h',

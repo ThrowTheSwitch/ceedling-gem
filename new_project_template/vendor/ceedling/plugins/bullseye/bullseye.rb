@@ -53,7 +53,7 @@ class Bullseye < Plugin
     @ceedling[:plugin_manager].post_compile_execute(arg_hash)
   end
 
-  def post_test_execute(arg_hash)
+  def post_test_fixture_execute(arg_hash)
     result_file = arg_hash[:result_file]
   
     if ((result_file =~ /#{BULLSEYE_RESULTS_PATH}/) and (not @result_list.include?(result_file)))
@@ -111,6 +111,7 @@ class Bullseye < Plugin
 
   def report_coverage_results_all(coverage)
     results = {
+      :header => BULLSEYE_ROOT_NAME.upcase,
       :coverage => {
         :functions => nil,
         :branches  => nil
@@ -129,7 +130,7 @@ class Bullseye < Plugin
   end
 
   def report_per_function_coverage_results(sources)
-    banner = @ceedling[:plugin_reportinator].generate_banner "#{BULLSEYE_ROOT_NAME.upcase}: CODE COVERAGE SUMMARY"
+    banner = @ceedling[:plugin_reportinator].generate_banner( "#{BULLSEYE_ROOT_NAME.upcase}: CODE COVERAGE SUMMARY" )
     @ceedling[:streaminator].stdout_puts "\n" + banner
 
     coverage_sources = sources.clone
@@ -153,9 +154,9 @@ class Bullseye < Plugin
 
   def verify_coverage_file
     exist = @ceedling[:file_wrapper].exist?( ENVIRONMENT_COVFILE )
-  
+
     if (!exist)
-      banner = @ceedling[:plugin_reportinator].generate_banner "#{BULLSEYE_ROOT_NAME.upcase}: CODE COVERAGE SUMMARY"
+      banner = @ceedling[:plugin_reportinator].generate_banner( "#{BULLSEYE_ROOT_NAME.upcase}: CODE COVERAGE SUMMARY" )
       @ceedling[:streaminator].stdout_puts "\n" + banner + "\nNo coverage file.\n\n"
     end
     
