@@ -1,7 +1,7 @@
 require 'constants'
 
 
-class BuildInvokerHelper
+class BuildInvokerUtils
 
   constructor :configurator, :streaminator
   
@@ -13,7 +13,7 @@ class BuildInvokerHelper
       
       @streaminator.stderr_puts( error_header )
 
-      if (@configurator.project_use_auxiliary_dependencies)
+      if (@configurator.project_use_deep_dependencies)
         help_message = "Try fixing #include statements or adding missing file. Then run '#{REFRESH_TASK_ROOT}#{context.to_s}' task and try again."      
         @streaminator.stderr_puts( help_message )
       end
