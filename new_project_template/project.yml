@@ -11,7 +11,7 @@
   :use_auxiliary_dependencies: TRUE
   :build_root: build
 #  :release_build: TRUE
-  :test_file_prefix: Test
+  :test_file_prefix: test_
 
 #:release_build:
 #  :output: MyApp.out
@@ -62,4 +62,5 @@
     - vendor/ceedling/plugins
   :enabled:
     - stdout_pretty_tests_report
+    - module_generator
 ...
