@@ -4,6 +4,7 @@ Gemfile.lock
 pkg/*
 doc
 .yardoc
+*.sublime-workspace
 
 new_project_template/vendor/ceedling/docs/CeedlingPacket.pdf
 new_project_template/vendor/ceedling/vendor/unity/auto/colour_prompt.rb
