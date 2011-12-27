@@ -1,7 +1,7 @@
 ---
 
 :project:
-  :use_exceptions: TRUE
+  :use_exceptions: FALSE
   :use_test_preprocessor: TRUE
   :use_auxiliary_dependencies: TRUE
   :build_root: build
@@ -27,7 +27,10 @@
     - test/support
 
 :defines:
-  :common: &common_defines
+  # in order to add common defines:
+  #  1) remove the trailing [] from the :common: section
+  #  2) add entries to the :common: section (e.g. :test: has TEST defined)
+  :common: &common_defines []
   :test:
     - TEST
     - *common_defines
