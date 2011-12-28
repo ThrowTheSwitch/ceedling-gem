@@ -46,8 +46,7 @@ class CeedlingTasks < Thor
   end
 
   desc "example PROJ_NAME [DEST]", "create specified example project (in DEST, if specified)"
-  def example(proj_name, dest=".")
-    dest = "." if dest.nil?
+  def example(proj_name, dest="temp_sensor")
     directory Ceedling::NEW_PROJECT_DIR, dest
     remove_file "#{dest}/project.yml"
     remove_file "#{dest}/rakefile.rb"
