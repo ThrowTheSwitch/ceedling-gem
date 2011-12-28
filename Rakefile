@@ -4,6 +4,20 @@ require "./lib/ceedling"
 require "fileutils"
 require "erb"
 
+def update_revisions
+  puts "Updating version info..."
+  versions = {}
+  full_version_info = nil
+  Dir.chdir(Ceedling::NEW_PROJECT_DIR) { full_version_info = `rake version` }
+  puts full_version_info
+  full_version_info.each_line do |line|
+    line = line.split("::")
+    versions[line.first.strip.upcase] = line.last.strip
+  end
+  result = ERB.new(File.read("lib/ceedling/version.rb.erb")).result(binding)
+  File.open("lib/ceedling/version.rb", "wb+") { |f| f.puts result }
+end
+
 desc "update all the tools from sourceforge and update version info"
 task :update_tools do
 
@@ -64,17 +78,10 @@ task :update_tools do
     FileUtils.cp_r "temp/#{path[:src]}", "#{dest}"
   end
   rm_rf "temp"
+  update_revisions
+end
 
-  puts "\nUpdating version info..."
-  versions = {}
-  full_version_info = nil
-  Dir.chdir(Ceedling::NEW_PROJECT_DIR) { full_version_info = `rake version` }
-  puts full_version_info
-  full_version_info.each_line do |line|
-    line = line.split("::")
-    versions[line.first.strip.upcase] = line.last.strip
-  end
-  result = ERB.new(File.read("lib/ceedling/version.rb.erb")).result(binding)
-  File.open("lib/ceedling/version.rb", "wb+") { |f| f.puts result }
-
+desc "Update versions"
+task :update_revs do
+  update_revisions
 end
